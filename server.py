@@ -31,7 +31,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
        
         message = self.rfile.read()
         line = message.decode('utf-8').split(' ')
-        METHOD = line[0]
+        METHOD = line[0] 
         if len(line)<4 and len(line)>0:
                 if METHOD == 'INVITE':
                    print('INVITE received')
