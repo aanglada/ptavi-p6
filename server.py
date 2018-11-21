@@ -12,7 +12,7 @@ try:
     IP = sys.argv[1]
     PORT = int(sys.argv[2])
     FILE = sys.argv[3]
-except IndexError, TypeError, ValueError:
+except (IndexError, TypeError, ValueError):
     sys.exit("Usage: python3 server.py IP port audio_file")
 
 if not os.path.exists(FILE):
@@ -30,18 +30,17 @@ class EchoHandler(socketserver.DatagramRequestHandler):
 
     def Comprobar_Peticion(self):
         try:
-            if len(self.line) == 3 and len(self.line[1].split(":")) == 2:
+            if len(self.line) == 3:
                 sip_condition = self.line[1].split(":")[0] == ("sip")
-                port = int(self.line[1].split(":")[1])
                 final_condition = self.line[2] == ("SIP/2.0\r\n\r\n")
                 arroba_condition = False
-            if self.line[1].find("@") != -1:
+            if "@" in self.line[1]:
                 arroba_condition = True
             if sip_condition and arroba_condition and final_condition:
                 return True
             else:
                 return False
-        except IndexError, TypeError, ValueError:
+        except (IndexError, TypeError, ValueError):
             return False
 
     def handle(self):
