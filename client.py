@@ -12,13 +12,13 @@ import sys
 # Dirección IP del servidor.
 
 try:
-	METHOD = sys.argv[1]
-	LOGIN = sys.argv[2].split('@')[0]
-	IP = sys.argv[2].split('@')[1].split(':')[0]
-	PORT = int(sys.argv[2].split(':')[1])
+        METHOD = sys.argv[1]
+        LOGIN = sys.argv[2].split('@')[0]
+        IP = sys.argv[2].split('@')[1].split(':')[0]
+        PORT = int(sys.argv[2].split(':')[1])
 
 except (IndexError, ValueError):
-	sys.exit('Usage: python3 client.py method receiver@IP.SIPport')
+        sys.exit('Usage: python3 client.py method receiver@IP.SIPport')
 
 
 # Contenido que vamos a enviar
@@ -36,11 +36,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as my_socket:
     Recieve = data.decode('utf-8').split()
 
     if Recieve[1] == "100"and Recieve[4] == "180" and Recieve[7] == "200":
-        ack ='ACK sip:' + LOGIN + '@' + IP + ' SIP/2.0\r\n'
+        ack = 'ACK sip:' + LOGIN + '@' + IP + ' SIP/2.0\r\n'
         my_socket.send(bytes(ack, 'utf-8') + b'\r\n')
         print('Enviando: ' + ack)
     else:
         print(data.decode('utf-8'))
     print('Terminando socket...')
-    
+
 print("Fin.")

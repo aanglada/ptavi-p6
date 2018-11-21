@@ -11,8 +11,8 @@ import sys
 try:
     IP = sys.argv[1]
     PORT = int(sys.argv[2])
-    FILE= sys.argv[3]
-except:
+    FILE = sys.argv[3]
+except IndexError, TypeError, ValueError:
     sys.exit("Usage: python3 server.py IP port audio_file")
 
 if not os.path.exists(FILE):
@@ -24,6 +24,7 @@ OK = b"SIP/2.0 200 OK\r\n"
 BAD_REQUEST = b"SIP/2.0 400 Bad Request\r\n"
 Not_Allowed = b"SIP/2.0 405 Method Not Allowed\r\n"
 aEjecutar = "./mp32rtp -i 127.0.0.1 -p 23032 < " + FILE
+
 
 class EchoHandler(socketserver.DatagramRequestHandler):
 
@@ -40,7 +41,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 return True
             else:
                 return False
-        except:
+        except IndexError, TypeError, ValueError:
             return False
 
     def handle(self):
@@ -69,6 +70,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
         else:
             pass
 
+
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
     server = socketserver.UDPServer((IP, PORT), EchoHandler)
@@ -77,4 +79,3 @@ if __name__ == "__main__":
         server.serve_forever()
     except KeyboardInterrupt:
         print("Finalizado servidor")
-
