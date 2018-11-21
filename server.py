@@ -28,19 +28,23 @@ aEjecutar = "./mp32rtp -i 127.0.0.1 -p 23032 < " + FILE
 class EchoHandler(socketserver.DatagramRequestHandler):
 
     def Comprobar_Peticion(self):
-        if len(self.line) == 3:
-            sip_condition = self.line[1].split(":")[0] == ("sip")
-            final_condition = self.line[2] == ("SIP/2.0\r\n\r\n")
-            arroba_condition = False
-        if self.line[1].find("@") != -1:
-            arroba_condition = True
-        if sip_condition and arroba_condition and final_condition:
-            self.check = True
-        return self.check
+        try:
+            if len(self.line) == 3 and len(self.line[1].split(":")) == 2:
+                sip_condition = self.line[1].split(":")[0] == ("sip")
+                port = int(self.line[1].split(":")[1])
+                final_condition = self.line[2] == ("SIP/2.0\r\n\r\n")
+                arroba_condition = False
+            if self.line[1].find("@") != -1:
+                arroba_condition = True
+            if sip_condition and arroba_condition and final_condition:
+                return True
+            else:
+                return False
+        except:
+            return False
 
     def handle(self):
 
-        self.check = False
         message = self.rfile.read()
 
         if message:
@@ -60,6 +64,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 else:
                     self.wfile.write(Not_Allowed + b'\r\n')
             else:
+                print("BAD REQUEST")
                 self.wfile.write(BAD_REQUEST + b'\r\n')
         else:
             pass
