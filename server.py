@@ -54,7 +54,8 @@ class EchoHandler(socketserver.DatagramRequestHandler):
             if self.Comprobar_Peticion():
                 if METHOD == 'INVITE':
                     print('INVITE received')
-                    self.wfile.write(TRYING + b'\r\n' + RINGING + b'\r\n' + OK + b'\r\n')
+                    self.wfile.write(TRYING + b'\r\n' + RINGING + b'\r\n'
+                                     + OK + b'\r\n')
                 elif METHOD == 'ACK':
                     print("ACK RECIVED")
                     os.system(aEjecutar)
